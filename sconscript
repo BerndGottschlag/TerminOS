@@ -1,0 +1,32 @@
+import os
+import sys
+
+Import('env', 'BIN_DIR')
+
+project_name = 'terminos_core' #TODO: set according to folder name?
+
+source_path = 'src'
+include_path = 'inc'
+
+dependencies = ['CMSIS/Include',
+                'CMSIS/Device/ST/STM32F4xx/Include'
+                ]
+
+
+
+local_env = env.Clone()
+
+
+sources = [Glob(os.path.join(source_path, '*.c')), Glob(os.path.join(source_path, '*.s'))]
+
+local_env.Append(LINKFLAGS = ['-Tlinkerscript_stm32f429zitx.ld'])
+
+Depends(project_name, 'linkerscript_stm32f429zitx.ld')
+
+local_env.Append(
+	CPPPATH = [include_path] + dependencies,
+#TODO libs
+)
+
+
+local_env.Program(target = os.path.join(BIN_DIR, project_name), source = sources)

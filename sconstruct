@@ -1,0 +1,50 @@
+import os.path
+
+BIN_DIR = './bin'
+
+lib_path = []
+libs = []
+
+
+cpp_path = []
+cpp_defines = ['STM32F429xx']
+
+cc_flags = ['-mcpu=cortex-m4', '-mfloat-abi=hard', '-mfpu=fpv4-sp-d16', '-mthumb', '-mthumb-interwork', '-O0', '-ffunction-sections', '-fdata-sections', '-fno-move-loop-invariants', '-g3', '-Wall', '-Wextra', '-pedantic', '-Wmissing-include-dirs', '-Wswitch-enum', '-Wconversion']
+
+link_flags = ['-W', '-mfloat-abi=hard', '-mcpu=cortex-m4', '-mfpu=fpv4-sp-d16', '--specs=nosys.specs', '-ffunction-sections', '-fdata-sections', '-fno-move-loop-invariants']
+
+#ar = 'arm-none-eabi-ar'
+#as_ = 'arm-none-eabi-as'
+#ld = 'arm-none-eabi-g++'
+#link = 'arm-none-eabi-gcc'
+#objcopy = 'arm-none-eabi-objcopy'
+
+toolchain = 'arm-none-eabi-'
+env = Environment(
+	LIBPATH = lib_path,
+	LIBS = libs,
+	LINKFLAGS = link_flags,
+	CPPPATCH = cpp_path,
+	CPPDEFINES = cpp_defines,
+	CC = toolchain + 'gcc',
+	#AR = ar,
+	AS = toolchain + 'as',
+	#LD = ld,
+	#LINK = link,
+	#OBJCOPY = objcopy,
+	CCFLAGS = cc_flags,
+	TARGET_ARCH = 'arm',
+	PROGSUFFIX = '.elf',
+	OBJSUFFIX = '.o',
+	)
+
+Export('env', 'BIN_DIR')
+
+
+
+SConscript('sconscript', variant_dir='build')
+#SConscript(
+#	[
+#		'sconscript'
+#	]
+#)
